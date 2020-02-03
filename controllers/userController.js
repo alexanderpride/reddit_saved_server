@@ -15,13 +15,6 @@ exports.auth_link = function(req, res, next){
     res.json({auth_link: url});
 };
 
-exports.test_auth_link = function(req, res, next){
-
-    console.log(req.session.state_string, 'blah');
-    console.log(req.sessionID);
-
-};
-
 exports.link = function (req, res, next) {
     // Is called by the API to return to the web-page, stores the access token to allow continued requests to the API
 
