@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 const userController = require('../controllers/userController');
 
 /* GET users listing. */
@@ -10,7 +11,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/auth_link', userController.auth_link);
 
-router.get('/link', userController.link);
+router.post('/link', userController.link);
 
 
 

@@ -6,44 +6,44 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const session =  require('express-session');
 const mongo_storage = require('connect-mongo')(session);
+const cors = require('cors');
 
 
-let mongoDB = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0-vbimk.mongodb.net/test?retryWrites=true&w=majority`;
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// let mongoDB = `mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@cluster0-vbimk.mongodb.net/test?retryWrites=true&w=majority`;
+// mongoose.connect(mongoDB, { useNewUrlParser: true });
+// let db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+const valid = ['http://localhost:8080'];
 
-const indexRouter = require('./routes/index');
+const contentRouter = require('./routes/content');
 const usersRouter = require('./routes/users');
 
 const app = express();
 
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-    next();
-});
-
+app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
+
 app.use(session({
-    secret: 'Elias Pettersson',
-    resave: false,
+    secret: 'Quinn Hughes',
+    resave: true,
     saveUninitialized: true,
-    cookie: {httpOnly: false}
-    // store: new mongo_storage({mongooseConnection: db}),
-    // autoRemove: 'native'
+    cookie: {
+        httpOnly: false
+    }
 }));
 
 
 
 
-app.use('/', indexRouter);
+app.use('/content', contentRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;
